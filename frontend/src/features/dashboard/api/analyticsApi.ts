@@ -1,4 +1,4 @@
-import api from "@/services/axios";
+﻿import api from "@/services/axios";
 import type { APIResponse } from "@/types";
 import type {
   DashboardStats,
@@ -8,6 +8,7 @@ import type {
   CrimeTypeSummary,
   StatusSummary,
   DistrictSummary,
+  RepeatOffender,
 } from "@/types";
 
 export const getDashboard = () =>
@@ -19,9 +20,9 @@ export const getStatusSummary = () =>
 export const getCrimeTypes = () =>
   api.get<APIResponse<CrimeTypeSummary[]>>("/analytics/crime-type-summary");
 
-export const getTrends = (months = 12) =>
+export const getTrends = (months = 12, crimeType?: string) =>
   api.get<APIResponse<MonthlyTrend[]>>("/analytics/trends", {
-    params: { months },
+    params: { months, ...(crimeType ? { crime_type: crimeType } : {}) },
   });
 
 export const getHotspots = (topN = 10) =>
@@ -36,3 +37,8 @@ export const getPendingCases = (skip = 0, limit = 50) =>
 
 export const getDistrictSummary = () =>
   api.get<APIResponse<DistrictSummary[]>>("/analytics/district-summary");
+
+export const getRepeatOffenders = (minCases = 2) =>
+  api.get<APIResponse<RepeatOffender[]>>("/analytics/repeat-offenders", {
+    params: { min_cases: minCases },
+  });
