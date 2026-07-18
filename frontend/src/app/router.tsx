@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+﻿import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
@@ -48,6 +48,7 @@ export default function Router() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/investigation" element={<Investigation />} />
+          <Route path="/investigation/:caseId" element={<Investigation />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/network" element={<Network />} />
           <Route path="/copilot" element={<Copilot />} />
