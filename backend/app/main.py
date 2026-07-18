@@ -1,4 +1,4 @@
-"""
+﻿"""
 Crime-AI Backend — FastAPI application entry point.
 Run from the backend/ directory:
     uvicorn app.main:app --reload
