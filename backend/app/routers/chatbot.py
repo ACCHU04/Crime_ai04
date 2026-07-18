@@ -1,6 +1,7 @@
 """Router: /chat — AI chatbot powered by the orchestrator."""
+import logging
 from typing import Optional
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -8,6 +9,8 @@ from app.database import get_db
 from app.ai.orchestrator import (
     orchestrator, OrchestratorRequest, Intent
 )
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/chat", tags=["Chatbot"])
 
@@ -36,19 +39,37 @@ async def chat(request: ChatRequest, db: Session = Depends(get_db)):
     Force a specific agent by passing intent_hint:
       "sql_query" | "investigate" | "summarize"
     """
-    result = orchestrator.run(
-        OrchestratorRequest(
-            query=request.query,
-            case_data=request.case_data,
-            db=db,
-            intent_hint=request.intent_hint,
+    try:
+        result = orchestrator.run(
+            OrchestratorRequest(
+                query=request.query,
+                case_data=request.case_data,
+                db=db,
+                intent_hint=request.intent_hint,
+            )
         )
-    )
 
-    return ChatResponse(
-        intent=result.intent,
-        agent=result.agent,
-        payload=result.payload,
-        error=result.error,
-        session_id=request.session_id,
-    )
+        if result.error:
+            logger.error("Chatbot error: %s", result.error)
+            raise HTTPException(status_code=500, detail="Chatbot processing failed")
+
+        return ChatResponse(
+            intent=result.intent,
+            agent=result.agent,
+            payload=result.payload,
+            error=result.error,
+            session_id=request.session_id,
+        )
+
+    except HTTPException:
+        raise
+
+    except Exception as e:
+        logger.exception(
+            "Chatbot failed",
+            extra={
+                "query": request.query,
+                "intent_hint": request.intent_hint,
+            },
+        )
+        raise HTTPException(status_code=500, detail="Internal chatbot error")

@@ -93,11 +93,13 @@ _DISTRICT_ALIASES: dict[str, str] = {
 }
 
 _STATUS_KEYWORDS: dict[str, str] = {
-    "pending":             "Under Investigation",
-    "open":                "Open",
-    "closed":              "Closed",
-    "filed":               "Filed",
-    "under investigation": "Under Investigation",
+    "pending":              "Under Investigation",
+    "under investigation":  "Under Investigation",
+    "chargesheet":          "Chargesheet Filed",
+    "closed":               "Closed",
+    "trial":                "Pending Trial",
+    "convicted":            "Convicted",
+    "acquitted":            "Acquitted",
 }
 
 
@@ -173,17 +175,22 @@ class QueryParser:
 # SQL Builder — constructs parameterised SQL from ParsedIntent
 # ---------------------------------------------------------------------------
 
-_BASE_SELECT = """
+_BASE_FROM = """
+FROM   casemaster c
+JOIN   crimesubhead cs ON c.crimesubheadid = cs.crimesubheadid
+JOIN   district     d  ON c.districtid     = d.districtid
+JOIN   casestatus   cst ON c.casestatusid  = cst.casestatusid
+"""
+
+_BASE_SELECT = f"""
     SELECT
         c.caseid,
         c.firnumber,
-        c.incidentdate,
+        c.occurrencedate,
         cs.crimesubheadname          AS crime_type,
         d.districtname               AS district,
-        c.casestatus                 AS status
-    FROM   casemaster c
-    JOIN   crimesubhead cs ON c.crimesubheadid = cs.crimesubheadid
-    JOIN   district     d  ON c.districtid     = d.districtid
+        cst.statusname               AS status
+    {_BASE_FROM}
 """
 
 
@@ -211,21 +218,21 @@ class SQLBuilder:
             params["district"] = intent.district.lower()
 
         if intent.status:
-            clauses.append("LOWER(c.casestatus) = :status")
+            clauses.append("LOWER(cst.statusname) = :status")
             params["status"] = intent.status.lower()
 
         if intent.this_month:
             clauses.append(
-                "DATE_TRUNC('month', c.incidentdate) = DATE_TRUNC('month', CURRENT_DATE)"
+                "DATE_TRUNC('month', c.occurrencedate) = DATE_TRUNC('month', CURRENT_DATE)"
             )
 
         if intent.this_year:
             clauses.append(
-                "DATE_TRUNC('year', c.incidentdate) = DATE_TRUNC('year', CURRENT_DATE)"
+                "DATE_TRUNC('year', c.occurrencedate) = DATE_TRUNC('year', CURRENT_DATE)"
             )
 
         where = ("WHERE " + "\n      AND ".join(clauses)) if clauses else ""
-        sql = _BASE_SELECT + where + "\nORDER BY c.incidentdate DESC\nLIMIT 100"
+        sql = _BASE_SELECT + where + "\nORDER BY c.occurrencedate DESC\nLIMIT 100"
         return sql, params
 
 

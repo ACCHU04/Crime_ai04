@@ -5,6 +5,7 @@ Run from the backend/ directory:
 """
 import logging
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
@@ -111,5 +112,21 @@ def root():
 
 @app.get("/health")
 def health():
-    """Health-check endpoint for monitoring / deployment probes."""
-    return {"status": "ok", "version": "1.0.0"}
+    """Health-check endpoint — confirms API + database are reachable."""
+    db_status = "disconnected"
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        db_status = "connected"
+    except Exception as exc:
+        logger.warning("Health check: database unreachable", exc_info=exc)
+    return {
+        "status": "healthy" if db_status == "connected" else "unhealthy",
+        "database": db_status,
+        "version": "1.0.0",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "checks": {
+            "api": "ok",
+            "database": db_status,
+        },
+    }

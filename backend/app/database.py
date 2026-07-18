@@ -8,10 +8,13 @@ from dotenv import load_dotenv
 _ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
 load_dotenv(dotenv_path=_ENV_PATH)
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:Acchu%4004@localhost:5432/crime_ai"
-)
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+
+if not DATABASE_URL:
+    raise RuntimeError(
+        "DATABASE_URL environment variable is not set. "
+        "Copy .env.example to .env and configure it."
+    )
 
 engine = create_engine(DATABASE_URL)
 
