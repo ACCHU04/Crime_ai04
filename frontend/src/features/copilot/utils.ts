@@ -12,19 +12,6 @@ export function getIntentColor(intent: Intent): string {
   return colors[intent] ?? colors.unknown;
 }
 
-export function getAgentLabel(agent: string): string {
-  const labels: Record<string, string> = {
-    sql_agent: "SQL Agent",
-    analytics_service: "Analytics",
-    graph_service: "Graph Engine",
-    investigation_agent: "Investigation Agent",
-    summarizer: "Summarizer",
-    none: "System",
-    error: "Error",
-  };
-  return labels[agent] ?? agent;
-}
-
 export function normalizeResponse(
   intent: string,
   _agent: string,

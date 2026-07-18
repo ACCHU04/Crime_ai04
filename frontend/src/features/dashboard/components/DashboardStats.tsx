@@ -1,6 +1,7 @@
 import { Files, Search, CheckCircle, Layers, Users } from "lucide-react";
 import { StatCard } from "@/components/common/StatCard";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
+import { ErrorState } from "@/components/common/ErrorState";
 import { formatNumber } from "@/lib/formatters";
 import { getUnderInvestigationCount } from "../utils";
 import type { DashboardData } from "../types";
@@ -17,7 +18,12 @@ export function DashboardStats({ data }: { data: DashboardData }) {
   }
 
   if (data.isError || !data.dashboard) {
-    return null;
+    return (
+      <ErrorState
+        title="Failed to load stats"
+        message="Dashboard statistics could not be loaded."
+      />
+    );
   }
 
   const stats = data.dashboard;

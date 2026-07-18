@@ -6,7 +6,18 @@ interface StatisticsPanelProps {
 }
 
 export function StatisticsPanel({ stats }: StatisticsPanelProps) {
-  if (!stats) return null;
+  if (!stats) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Statistics</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-xs text-[var(--text-muted)]">No graph loaded yet.</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const items = [
     { label: "Total Nodes", value: stats.total_nodes },

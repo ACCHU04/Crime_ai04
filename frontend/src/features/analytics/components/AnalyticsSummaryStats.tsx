@@ -1,15 +1,17 @@
 ﻿import { Files, Search, CheckCircle, Users } from "lucide-react";
 import { StatCard } from "@/components/common/StatCard";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
+import { ErrorState } from "@/components/common/ErrorState";
 import { formatNumber } from "@/lib/formatters";
 import type { DashboardStats } from "../types";
 
 interface AnalyticsSummaryStatsProps {
   data: DashboardStats | undefined;
   isLoading: boolean;
+  isError?: boolean;
 }
 
-export function AnalyticsSummaryStats({ data, isLoading }: AnalyticsSummaryStatsProps) {
+export function AnalyticsSummaryStats({ data, isLoading, isError }: AnalyticsSummaryStatsProps) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -20,7 +22,14 @@ export function AnalyticsSummaryStats({ data, isLoading }: AnalyticsSummaryStats
     );
   }
 
-  if (!data) return null;
+  if (isError || !data) {
+    return (
+      <ErrorState
+        title="Failed to load summary"
+        message="Dashboard stats could not be loaded."
+      />
+    );
+  }
 
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

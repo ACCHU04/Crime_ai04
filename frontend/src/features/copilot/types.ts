@@ -26,21 +26,6 @@ export interface GraphPayload {
   data: unknown;
 }
 
-export interface InvestigatePayload {
-  case_number: string | null;
-  summary: string;
-  suggested_actions: string[];
-  confidence: number;
-}
-
-export interface SummarizePayload {
-  summary: string;
-}
-
-export interface UnknownPayload {
-  message: string;
-}
-
 export interface ChatBubble {
   id: string;
   role: "user" | "assistant";

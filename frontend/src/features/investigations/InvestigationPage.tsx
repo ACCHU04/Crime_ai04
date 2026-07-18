@@ -4,7 +4,6 @@ import { Search } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { PageHeader } from "@/components/common/PageHeader";
 import { ErrorState } from "@/components/common/ErrorState";
-import { EmptyState } from "@/components/common/EmptyState";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import * as casesApi from "./api/casesApi";
@@ -76,9 +75,10 @@ export default function InvestigationPage() {
               </div>
             )}
             {allCases.isError && (
-              <EmptyState
+              <ErrorState
                 title="Failed to load cases"
-                description="Could not fetch cases from the backend."
+                message="Could not fetch cases from the backend."
+                onRetry={() => allCases.refetch()}
               />
             )}
           </CardContent>

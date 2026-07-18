@@ -1,5 +1,6 @@
 ﻿import { useNavigate } from "react-router-dom";
 import { PageHeader } from "@/components/common/PageHeader";
+import { ErrorState } from "@/components/common/ErrorState";
 import { useAnalytics } from "./hooks/useAnalytics";
 import { FilterBar } from "./components/FilterBar";
 import { AnalyticsSummaryStats } from "./components/AnalyticsSummaryStats";
@@ -14,6 +15,22 @@ import { PendingCasesTable } from "./components/PendingCasesTable";
 export default function AnalyticsPage() {
   const navigate = useNavigate();
   const analytics = useAnalytics();
+
+  if (analytics.dashboard.isError) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Analytics"
+          description="Crime trends, hotspots, and statistical analysis"
+        />
+        <ErrorState
+          title="Failed to load analytics"
+          message="The analytics backend is unreachable."
+          onRetry={() => analytics.dashboard.refetch()}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -33,6 +50,7 @@ export default function AnalyticsPage() {
       <AnalyticsSummaryStats
         data={analytics.dashboard.data}
         isLoading={analytics.dashboard.isLoading}
+        isError={analytics.dashboard.isError}
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

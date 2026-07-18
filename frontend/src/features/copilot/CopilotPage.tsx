@@ -14,6 +14,27 @@ import type { SqlQueryPayload } from "./types";
 import type { AnalyticsPayload } from "./types";
 import type { GraphPayload } from "./types";
 
+function TypingIndicator() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex gap-3"
+    >
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)]">
+        <Bot className="h-4 w-4 text-[var(--accent)]" />
+      </div>
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-card)] px-4 py-3">
+        <div className="flex gap-1">
+          <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--text-muted)] [animation-delay:0ms]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--text-muted)] [animation-delay:150ms]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--text-muted)] [animation-delay:300ms]" />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function CopilotPage() {
   const { messages, isSending, sendMessage, clearMessages } = useChat();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -70,6 +91,8 @@ export default function CopilotPage() {
               )}
             </div>
           ))}
+
+          {isSending && <TypingIndicator />}
         </div>
       </div>
 
