@@ -86,7 +86,8 @@ class OrchestratorRequest:
 _GRAPH_KEYWORDS = frozenset({
     "network", "associates", "connected", "linked", "common accused",
     "relationships", "connections", "who knows whom", "repeat offender network",
-    "criminal network", "gang", " associates of",
+    "criminal network", "gang", " associates of", "associate of",
+    "who is connected", "linked to", "knows whom", "relationship between",
 })
 
 _ANALYTICS_KEYWORDS = frozenset({
@@ -95,21 +96,30 @@ _ANALYTICS_KEYWORDS = frozenset({
     "most cases", "increasing", "decreasing", "crime rate", "crime summary",
     "which district", "which crime", "overall", "overview of crime",
     "how many cases", "total cases", "convicted", "closed cases",
+    "district wise", "crime wise", "compare districts", "compare crimes",
+    "monthly", "weekly", "yearly", "last month", "this year",
+    "repeat offenders", "serial", "pattern", "cluster",
 })
 
 _INVESTIGATE_KEYWORDS = frozenset({
     "investigate", "analyse", "analyze", "deep dive", "cross-reference",
     "suspect history", "pattern", "link", "connect", "related cases",
+    "who did", "suspect", "motive", "evidence", "alibi",
+    "timeline of", "what happened", "case details", "case summary",
+    "case for", "brief on", "analysis of",
 })
 
 _SUMMARIZE_KEYWORDS = frozenset({
     "summarize", "summarise", "brief", "overview", "tldr",
-    "short description", "in brief", "summary",
+    "short description", "in brief", "summary", "tell me about",
+    "describe", "what is this case about", "explain",
 })
 
 _SQL_KEYWORDS = frozenset({
     "show", "list", "count", "how many", "find", "get", "fetch",
     "select", "search", "give me", "what are", "which",
+    "display", "retrieve", "lookup", "look up", "all cases",
+    "all firs", "pending cases", "open cases",
 })
 
 
@@ -299,11 +309,12 @@ class Orchestrator:
 
     def _handle_investigate(self, req: OrchestratorRequest, intent: Intent) -> OrchestratorResult:
         case_data = req.case_data or {"query": req.query}
-        result = investigation_agent.investigate(case_data=case_data)
+        result = investigation_agent.investigate(case_data=case_data, db=req.db)
         return OrchestratorResult(intent=intent, agent="investigation_agent", payload=result)
 
     def _handle_summarize(self, req: OrchestratorRequest, intent: Intent) -> OrchestratorResult:
-        text = (req.case_data or {}).get("description", req.query)
+        case_data = req.case_data or {}
+        text = case_data.get("description", case_data.get("brief_facts", req.query))
         summary = summarizer.summarize_case(description=text)
         return OrchestratorResult(
             intent=intent,

@@ -18,7 +18,7 @@ def accused_by_case(case_id: int, db: Session = Depends(get_db)):
         "case_id": case_id,
         "fir_number": case.fir_number,
         "accused": [
-            {"accused_id": a.id, "accused_name": a.accused_name, "status": a.status}
+            {"accused_id": a.id, "accused_name": a.accused_name, "status": a.status, "age": a.age, "gender": a.gender}
             for a in case.accused
         ],
     }
@@ -33,6 +33,6 @@ def search_accused(name: str, db: Session = Depends(get_db)):
         .all()
     )
     return [
-        {"accused_id": a.id, "accused_name": a.accused_name, "case_id": a.case_id, "status": a.status}
+        {"accused_id": a.id, "accused_name": a.accused_name, "case_id": a.case_id, "status": a.status, "age": a.age, "gender": a.gender}
         for a in results
     ]
