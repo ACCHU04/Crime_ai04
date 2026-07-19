@@ -18,6 +18,7 @@ import { SuspectsPanel } from "./components/SuspectsPanel";
 import { OfficersPanel } from "./components/OfficersPanel";
 import { AIInvestigationSummary } from "./components/AIInvestigationSummary";
 import { RecommendationsPanel } from "./components/RecommendationsPanel";
+import { OfficerAssistant } from "@/features/intelligence/components/OfficerAssistant";
 import { RelationshipNetwork } from "./components/RelationshipNetwork";
 
 export default function InvestigationPage() {
@@ -133,6 +134,19 @@ export default function InvestigationPage() {
         <div className="space-y-6">
           <VictimsPanel victims={people.victims} isLoading={people.isLoading} />
           <SuspectsPanel accused={people.accused} isLoading={people.isLoading} />
+          {caseData.report && (
+            <OfficerAssistant
+              caseId={caseData.report.case_id}
+              crimeType={caseData.report.crime_type}
+              status={caseData.report.status}
+              district={caseData.report.district_name}
+              daysPending={Math.floor(
+                (Date.now() - new Date(caseData.report.filing_date).getTime()) / 86400000,
+              )}
+              accusedCount={caseData.report.accused_count}
+              victimCount={caseData.report.victim_count}
+            />
+          )}
           <OfficersPanel report={caseData.report} isLoading={caseData.isLoading} />
           <RecommendationsPanel
             summary={investigation.summary}

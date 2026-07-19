@@ -4,6 +4,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { useSidebar } from "@/hooks/useSidebar";
+import { FloatingCopilot } from "@/features/intelligence/components/FloatingCopilot";
 
 const Dashboard = lazy(() => import("@/routes/Dashboard"));
 const Investigation = lazy(() => import("@/routes/Investigation"));
@@ -36,6 +37,7 @@ function Layout({ children }: { children: React.ReactNode }) {
           <Suspense fallback={<PageLoader />}>{children}</Suspense>
         </div>
       </main>
+      <FloatingCopilot />
     </div>
   );
 }

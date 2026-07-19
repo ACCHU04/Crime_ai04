@@ -11,6 +11,7 @@ import { PendingCasesTable } from "./components/PendingCasesTable";
 import { QuickSearch } from "./components/QuickSearch";
 import { useDashboardIntelligence } from "@/features/intelligence/hooks/useDashboardIntelligence";
 import { IntelligenceCard } from "@/features/intelligence/components/IntelligenceCard";
+import { CrimeHeatMap } from "@/features/intelligence/components/CrimeHeatMap";
 
 export default function DashboardPage() {
   const dashboard = useDashboard();
@@ -58,8 +59,8 @@ export default function DashboardPage() {
           data={dashboard.trends}
           isLoading={dashboard.isLoading}
         />
-        <HotspotChart
-          data={dashboard.hotspots}
+        <CrimeHeatMap
+          hotspots={dashboard.hotspots}
           isLoading={dashboard.isLoading}
         />
       </DashboardGrid>
