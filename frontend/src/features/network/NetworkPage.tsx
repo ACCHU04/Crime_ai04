@@ -5,6 +5,7 @@ import { SearchPanel } from "./components/SearchPanel";
 import { NetworkControls } from "./components/NetworkControls";
 import { NetworkGraph } from "./components/NetworkGraph";
 import { NodeDetails } from "./components/NodeDetails";
+import { NetworkExplainability } from "@/features/intelligence/components/NetworkExplainability";
 import { RelationshipLegend } from "./components/RelationshipLegend";
 import { StatisticsPanel } from "./components/StatisticsPanel";
 
@@ -61,6 +62,12 @@ export default function NetworkPage() {
             node={network.selectedNode}
             edges={network.graph?.edges ?? []}
             allNodes={network.graph?.nodes ?? []}
+          />
+          <NetworkExplainability
+            selectedNode={network.selectedNode}
+            edges={network.graph?.edges ?? []}
+            allNodes={network.graph?.nodes ?? []}
+            stats={network.graph?.stats}
           />
           <StatisticsPanel stats={network.graph?.stats} />
           <RelationshipLegend />

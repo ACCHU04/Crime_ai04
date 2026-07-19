@@ -19,6 +19,7 @@ import { OfficersPanel } from "./components/OfficersPanel";
 import { AIInvestigationSummary } from "./components/AIInvestigationSummary";
 import { RecommendationsPanel } from "./components/RecommendationsPanel";
 import { OfficerAssistant } from "@/features/intelligence/components/OfficerAssistant";
+import { CaseSimilarity } from "@/features/intelligence/components/CaseSimilarity";
 import { RelationshipNetwork } from "./components/RelationshipNetwork";
 
 export default function InvestigationPage() {
@@ -129,6 +130,9 @@ export default function InvestigationPage() {
             summary={investigation.summary}
             isLoading={investigation.isLoading}
           />
+          {caseData.case && (
+            <CaseSimilarity currentCase={caseData.case} />
+          )}
         </div>
 
         <div className="space-y-6">
@@ -137,14 +141,14 @@ export default function InvestigationPage() {
           {caseData.report && (
             <OfficerAssistant
               caseId={caseData.report.case_id}
-              crimeType={caseData.report.crime_type}
-              status={caseData.report.status}
-              district={caseData.report.district_name}
-              daysPending={Math.floor(
-                (Date.now() - new Date(caseData.report.filing_date).getTime()) / 86400000,
-              )}
-              accusedCount={caseData.report.accused_count}
-              victimCount={caseData.report.victim_count}
+              crimeType={caseData.report.crime_head ?? ""}
+              status={caseData.report.status ?? ""}
+              district={caseData.report.district ?? ""}
+              daysPending={caseData.report.fir_date
+                ? Math.floor((Date.now() - new Date(caseData.report.fir_date).getTime()) / 86400000)
+                : 0}
+              accusedCount={people.accused?.length ?? 0}
+              victimCount={people.victims?.length ?? 0}
             />
           )}
           <OfficersPanel report={caseData.report} isLoading={caseData.isLoading} />

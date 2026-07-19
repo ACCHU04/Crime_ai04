@@ -11,6 +11,7 @@ import { DistrictTable } from "./components/DistrictTable";
 import { HotspotLeaderboard } from "./components/HotspotLeaderboard";
 import { RepeatOffenderTable } from "./components/RepeatOffenderTable";
 import { PendingCasesTable } from "./components/PendingCasesTable";
+import { PatternDetection } from "@/features/intelligence/components/PatternDetection";
 
 export default function AnalyticsPage() {
   const navigate = useNavigate();
@@ -45,6 +46,13 @@ export default function AnalyticsPage() {
         setCrimeType={analytics.setCrimeType}
         setMonths={analytics.setMonths}
         setTopN={analytics.setTopN}
+      />
+
+      <PatternDetection
+        hotspots={analytics.hotspots.data}
+        trends={analytics.trends.data}
+        crimeTypes={analytics.crimeTypes.data}
+        isLoading={analytics.hotspots.isLoading || analytics.trends.isLoading}
       />
 
       <AnalyticsSummaryStats
