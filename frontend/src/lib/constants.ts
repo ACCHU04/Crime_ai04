@@ -36,3 +36,17 @@ export const NODE_COLORS: Record<string, string> = {
   officer: "#8b5cf6",
   unknown: "#64748b",
 };
+
+export const SEVERITY_COLORS: Record<string, string> = {
+  critical: "bg-red-500/20 text-red-400 border-red-500/30",
+  high: "bg-orange-500/20 text-orange-400 border-orange-500/30",
+  medium: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+  low: "bg-green-500/20 text-green-400 border-green-500/30",
+};
+
+export function getSeverityFromScore(score: number): "critical" | "high" | "medium" | "low" {
+  if (score >= 80) return "critical";
+  if (score >= 60) return "high";
+  if (score >= 40) return "medium";
+  return "low";
+}

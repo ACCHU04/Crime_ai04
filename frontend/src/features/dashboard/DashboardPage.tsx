@@ -9,10 +9,13 @@ import { HotspotChart } from "./components/HotspotChart";
 import { RecentFIRTable } from "./components/RecentFIRTable";
 import { PendingCasesTable } from "./components/PendingCasesTable";
 import { QuickSearch } from "./components/QuickSearch";
+import { useDashboardIntelligence } from "@/features/intelligence/hooks/useDashboardIntelligence";
+import { IntelligenceCard } from "@/features/intelligence/components/IntelligenceCard";
 
 export default function DashboardPage() {
   const dashboard = useDashboard();
   const search = useAccusedSearch();
+  const intelligence = useDashboardIntelligence();
 
   if (dashboard.isError) {
     return (
@@ -38,6 +41,17 @@ export default function DashboardPage() {
       />
 
       <DashboardStats data={dashboard} />
+
+      {intelligence.length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-sm font-semibold text-slate-300">Daily Intelligence Brief</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {intelligence.map((result, i) => (
+              <IntelligenceCard key={i} result={result} />
+            ))}
+          </div>
+        </div>
+      )}
 
       <DashboardGrid>
         <CrimeTrendChart
