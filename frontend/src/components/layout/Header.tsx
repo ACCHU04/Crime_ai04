@@ -4,6 +4,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useSidebar } from "@/hooks/useSidebar";
 import { useKeyboardShortcut } from "@/hooks/useKeyboardShortcut";
 import { useState } from "react";
+import { CommandPalette } from "@/features/intelligence/components/CommandPalette";
 
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
@@ -79,34 +80,7 @@ export function Header() {
         </button>
       </div>
 
-      {searchOpen && (
-        <CommandPaletteOverlay onClose={() => setSearchOpen(false)} />
-      )}
+      <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
-  );
-}
-
-function CommandPaletteOverlay({ onClose }: { onClose: () => void }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative w-full max-w-lg rounded-xl border border-[var(--border-default)] bg-[var(--bg-card)] shadow-2xl">
-        <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] px-4">
-          <Command className="h-4 w-4 text-[var(--text-muted)]" />
-          <input
-            autoFocus
-            type="text"
-            placeholder="Type a command or search..."
-            className="flex-1 bg-transparent py-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none"
-          />
-          <kbd className="rounded border border-[var(--border-default)] bg-[var(--bg-elevated)] px-1.5 py-0.5 text-[10px] text-[var(--text-muted)]">
-            ESC
-          </kbd>
-        </div>
-        <div className="p-3 text-sm text-[var(--text-muted)]">
-          Start typing to search cases, analytics, and more...
-        </div>
-      </div>
-    </div>
   );
 }

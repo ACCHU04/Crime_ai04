@@ -15,6 +15,8 @@ export { PriorityQueue } from "./components/PriorityQueue";
 export { InvestigationComparison } from "./components/InvestigationComparison";
 export { PrintReport } from "./components/PrintReport";
 export { TimelineReplay } from "./components/TimelineReplay";
+export { CommandPalette } from "./components/CommandPalette";
+export { ExplanationCard } from "./components/ExplanationCard";
 export { buildDashboardIntelligence } from "./engine/dashboard";
 export { buildInvestigationIntelligence } from "./engine/investigation";
 export { buildAnalyticsIntelligence } from "./engine/analytics";
