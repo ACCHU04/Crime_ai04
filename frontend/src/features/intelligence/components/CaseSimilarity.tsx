@@ -16,7 +16,7 @@ interface SimilarCase extends Case {
   matchReasons: string[];
 }
 
-function computeCaseSimilarity(a: Case, b: Case): { score: number; reasons: string[] } {
+export function computeCaseSimilarity(a: Case, b: Case): { score: number; reasons: string[] } {
   let score = 0;
   const reasons: string[] = [];
 

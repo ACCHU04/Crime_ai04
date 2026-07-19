@@ -20,6 +20,9 @@ import { AIInvestigationSummary } from "./components/AIInvestigationSummary";
 import { RecommendationsPanel } from "./components/RecommendationsPanel";
 import { OfficerAssistant } from "@/features/intelligence/components/OfficerAssistant";
 import { CaseSimilarity } from "@/features/intelligence/components/CaseSimilarity";
+import { InvestigationComparison } from "@/features/intelligence/components/InvestigationComparison";
+import { PrintReport } from "@/features/intelligence/components/PrintReport";
+import { TimelineReplay } from "@/features/intelligence/components/TimelineReplay";
 import { RelationshipNetwork } from "./components/RelationshipNetwork";
 
 export default function InvestigationPage() {
@@ -125,7 +128,7 @@ export default function InvestigationPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="space-y-6">
           <CaseOverview report={caseData.report} isLoading={caseData.isLoading} />
-          <Timeline timeline={caseData.timeline} isLoading={caseData.isLoading} />
+          <TimelineReplay timeline={caseData.timeline} isLoading={caseData.isLoading} />
           <AIInvestigationSummary
             summary={investigation.summary}
             isLoading={investigation.isLoading}
@@ -133,6 +136,12 @@ export default function InvestigationPage() {
           {caseData.case && (
             <CaseSimilarity currentCase={caseData.case} />
           )}
+          <PrintReport
+            report={caseData.report}
+            summary={investigation.summary}
+            timeline={caseData.timeline}
+            isLoading={caseData.isLoading}
+          />
         </div>
 
         <div className="space-y-6">
@@ -156,6 +165,7 @@ export default function InvestigationPage() {
             summary={investigation.summary}
             isLoading={investigation.isLoading}
           />
+          <InvestigationComparison currentCase={caseData.case} />
           <RelationshipNetwork
             associates={investigation.associates}
             isLoading={investigation.isLoading}

@@ -12,6 +12,7 @@ import { QuickSearch } from "./components/QuickSearch";
 import { useDashboardIntelligence } from "@/features/intelligence/hooks/useDashboardIntelligence";
 import { IntelligenceCard } from "@/features/intelligence/components/IntelligenceCard";
 import { CrimeHeatMap } from "@/features/intelligence/components/CrimeHeatMap";
+import { PriorityQueue } from "@/features/intelligence/components/PriorityQueue";
 
 export default function DashboardPage() {
   const dashboard = useDashboard();
@@ -77,8 +78,8 @@ export default function DashboardPage() {
       </DashboardGrid>
 
       <DashboardGrid>
+        <PriorityQueue />
         <QuickSearch search={search} />
-        <div />
       </DashboardGrid>
     </div>
   );
